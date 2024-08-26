@@ -36,6 +36,10 @@ export const verifyToken = async (
     //Reviso si el usuario del jwt existe en mi base de datos
     const user = await User.findByPk(decoded.id);
 
+    if(!user){
+      return res.status(409).json('Error en el perfil');
+    }
+
     //Devuelvo el user al header
     req.user = user;
   } catch (error) {

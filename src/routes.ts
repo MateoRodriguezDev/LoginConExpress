@@ -31,7 +31,16 @@ router.post('/register',
     createUser
 )
 
-router.post('/login', loginUser)
+router.post('/login', 
+    body('email')
+        .isEmail().withMessage('Ingrese un correo valido'),
+    body('password')
+        .notEmpty().withMessage('Ingrese una contraseña')
+        .isString().withMessage('Ingrese una contraseña valida'),
+    
+    handleErrors,
+    loginUser
+)
 
 router.get('/profile', verifyToken, getUserById)
 

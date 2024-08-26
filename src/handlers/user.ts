@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import User from "../models/User.model";
-import { generateToken, saveImage } from "../helpers";
+import { checkPassword, generateToken, hashPassword } from "../helpers";
 import { Payload } from "../types";
 
 
@@ -10,11 +10,23 @@ export const getUsers = async (req: Request, res: Response) => {
 }
 
 export const createUser = async (req: Request, res: Response) => {
-    const user = await User.create(req.body)
-    if(req.file){
-        saveImage(req.file, user.name)
+    const {email, password} = req.body
+
+    //Verifico si el usuario ya existe
+    const exist = await User.findOne({where: {email}})
+    if(exist){
+        return res.status(409).json({error: 'El Usuario ya existe'})
     }
-    return res.json({data: user})
+
+    const user = await User.create(req.body)
+
+    //Hasheo contraseña
+    user.password = await hashPassword(password)
+
+    //Guardo el usuario
+    await user.save()
+
+    return res.json({data: {user: user.name, email}})
 }
 
 export const loginUser = async (req: Request, res: Response) => {
@@ -27,7 +39,7 @@ export const loginUser = async (req: Request, res: Response) => {
     }
     
     //Verificamos que la contraseña sea correcta
-    const isPasswordValid = user.password === password
+    const isPasswordValid = await checkPassword(password, user.password)
     if(!isPasswordValid){
         return res.status(404).json({error: 'La contraseña no es correcta'})
     }
@@ -42,6 +54,5 @@ export const loginUser = async (req: Request, res: Response) => {
 
 export const getUserById = (req: Request, res: Response) => {
     const {name, email} = req.user
-    const imageProfile = `./uploads/${name}`
-    res.json({vista: "Perfil", user: {name, email, imageProfile}})
+    res.json({vista: "Perfil", user: {name, email}})
 }
