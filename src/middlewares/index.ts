@@ -1,9 +1,12 @@
 import { Request, Response, NextFunction } from "express";
-import { body, validationResult } from "express-validator";
+import { validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
 import { JWTPayload } from "../types";
 import User from "../models/User.model";
 
+
+
+/** Express Validator */
 export const handleErrors = (
   req: Request,
   res: Response,
@@ -17,6 +20,8 @@ export const handleErrors = (
   next();
 };
 
+
+/** JWT Validator */
 export const verifyToken = async (
   req: Request,
   res: Response,
@@ -48,3 +53,5 @@ export const verifyToken = async (
 
   next();
 };
+
+

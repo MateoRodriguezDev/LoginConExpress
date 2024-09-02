@@ -1,4 +1,4 @@
-import { Model, Column, DataType, Table, AllowNull } from "sequelize-typescript";
+import { Model, Column, DataType, Table } from "sequelize-typescript";
 
 
 @Table({
@@ -23,6 +23,12 @@ class User extends Model {
         allowNull: false
     })
     declare password: string
+
+    @Column({
+        type: DataType.STRING(),
+        allowNull: true
+    })
+    declare profileIMG: string
 }
 
 export default User

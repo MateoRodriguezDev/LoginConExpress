@@ -1,4 +1,7 @@
+import path from 'path'
+import multer from 'multer'
 import { Request, Response } from "express";
+import {v4 as uuid} from 'uuid'
 import User from "../models/User.model";
 import { checkPassword, generateToken, hashPassword } from "../helpers";
 import { Payload } from "../types";
@@ -53,6 +56,42 @@ export const loginUser = async (req: Request, res: Response) => {
 } 
 
 export const getUserById = (req: Request, res: Response) => {
-    const {name, email} = req.user
-    res.json({vista: "Perfil", user: {name, email}})
+    const {name, email, profileIMG} = req.user
+    res.json({vista: "Perfil", user: {name, email, profileIMG}})
+}
+
+
+// /** Image Uploader */
+const extensions = ["jpg", "png", "jpeg"]
+
+export const updateProfile = async (req: Request, res: Response) => {
+    if(!req.files || Object.keys(req.files).length === 0){
+        return res.status(403).json('Imagen obligatoria')
+    }
+    
+    const {file} = req.files as any
+
+    if(!file){
+        return res.status(403).json('Imagen obligatoria')
+    }
+
+    const nameAndExtension : string[] = file.name.split('.')
+    const extension = nameAndExtension[nameAndExtension.length - 1]
+    if(!extensions.includes(extension)){
+      return res.status(403).json({msg: `Imagen no valida, tipo de imagenes permitidos: ${extensions}`})
+    }
+  
+    const tempName = uuid() + '.' + extension
+    const uploadPath = path.join(__dirname, '../uploads/', tempName)
+    file.mv(uploadPath, function(err: any) {
+      if(err){
+        res.status(500).json('Error al subir la imagen')
+      }
+    })
+
+    //Relacionamos la imagen con el usuario
+    req.user.profileIMG = `/uploads/${tempName}`
+    req.user.save()
+  
+    res.status(201).json('Imagen de perfil actualizada correctamente')
 }

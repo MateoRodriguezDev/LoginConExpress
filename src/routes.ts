@@ -1,7 +1,6 @@
 import {request, Router} from 'express'
-import multer from 'multer'
 import { body } from 'express-validator'
-import { getUsers, createUser, loginUser, getUserById } from './handlers/user'
+import { getUsers, createUser, loginUser, getUserById, updateProfile } from './handlers/user'
 import { handleErrors, verifyToken } from './middlewares'
 
 
@@ -43,5 +42,7 @@ router.post('/login',
 )
 
 router.get('/profile', verifyToken, getUserById)
+
+router.post('/profile/update', verifyToken, updateProfile)
 
 export default router

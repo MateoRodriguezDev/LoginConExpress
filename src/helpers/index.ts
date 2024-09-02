@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 import { Payload } from "../types";
-import fs from 'node:fs'
 import bcrypt from 'bcrypt'
 
 export function generateToken(payload: Payload) {
