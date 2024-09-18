@@ -1,21 +1,16 @@
-import {request, Router} from 'express'
+import {Router} from 'express'
 import { body } from 'express-validator'
-import { getUsers, createUser, loginUser, getUserById, updateProfile } from './handlers/user'
-import { handleErrors, verifyToken } from './middlewares'
+import { getAdmins, createAdmin, loginAdmin, getAdminById } from '../controllers/admin'
+import { handleErrors, isAdmin, verifyToken } from '../middlewares'
 
 
 const router = Router()
-
-
-
-router.get('/', getUsers)
+router.get('/', verifyToken, isAdmin, getAdmins)
 
 router.post('/register', 
-
     body('name')
-        .notEmpty().withMessage('El nombre no puede ir vacío')
         .isString().withMessage('El nombre debe ser un string')
-        .isLength({min: 5, max: 15}),
+        .trim().isLength({min: 5, max: 15}).withMessage('Minimo 5 caracteres, maximo 15'),
 
     body('email')
         .trim()
@@ -25,9 +20,10 @@ router.post('/register',
         .isLength({ min: 8 }).withMessage('La contraseña debe tener al menos 8 caracteres')
         .matches(/\d/).withMessage('La contraseña debe contener al menos un número')
         .matches(/[A-Za-z]/).withMessage('La contraseña debe contener al menos una letra'),
-    
+    verifyToken,
+    isAdmin,
     handleErrors,
-    createUser
+    createAdmin
 )
 
 router.post('/login', 
@@ -38,11 +34,9 @@ router.post('/login',
         .isString().withMessage('Ingrese una contraseña valida'),
     
     handleErrors,
-    loginUser
+    loginAdmin
 )
 
-router.get('/profile', verifyToken, getUserById)
-
-router.post('/profile/update', verifyToken, updateProfile)
+router.get('/profile', verifyToken, getAdminById)
 
 export default router

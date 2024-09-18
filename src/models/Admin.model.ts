@@ -2,10 +2,10 @@ import { Model, Column, DataType, Table } from "sequelize-typescript";
 
 
 @Table({
-    tableName: 'users'
+    tableName: 'admins'
 })
 
-class User extends Model {
+class Admin extends Model {
     @Column({
         type: DataType.STRING(100),
         allowNull: false
@@ -26,9 +26,11 @@ class User extends Model {
 
     @Column({
         type: DataType.STRING(),
-        allowNull: true
+        defaultValue: "admin"
     })
-    declare profileIMG: string
+    declare rol: string
 }
 
-export default User
+
+
+export default Admin

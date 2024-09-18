@@ -2,7 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import colors from 'colors'
 import db from './config/db'
-import userRouter from './routes'
+import adminRouter from './routes/AdminRoutes'
 import morgan from 'morgan'
 import fileUpload from 'express-fileupload'
 
@@ -35,6 +35,9 @@ app.use(fileUpload({
 app.use(morgan('dev'))
 
 /** Rutas */
-app.use('/api/users',userRouter)
+app.use('/api/admins',adminRouter)
+
+
+
 
 export default app
