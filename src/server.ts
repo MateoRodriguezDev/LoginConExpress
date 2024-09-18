@@ -1,10 +1,12 @@
 import express from 'express'
 import cors from 'cors'
 import colors from 'colors'
-import db from './config/db'
-import adminRouter from './routes/AdminRoutes'
 import morgan from 'morgan'
 import fileUpload from 'express-fileupload'
+import db from './config/db'
+import adminRouter from './routes/AdminRoutes'
+import userRouter from './routes/UserRoutes'
+import authRouter from './routes/AuthRoutes'
 
 /** Conexion a la base de datos */
 export async function connectDB() {
@@ -36,6 +38,8 @@ app.use(morgan('dev'))
 
 /** Rutas */
 app.use('/api/admins',adminRouter)
+app.use('/api/users',userRouter)
+app.use('/api/auth',authRouter)
 
 
 

@@ -1,10 +1,11 @@
 import server from './server'
-import Admin from './models/Admin.model';
+import { Payload } from './types';
 
 declare global {
     namespace Express {
         interface Request {
-            admin?: Admin; //Le agrego user a request
+            admin?: Payload; //Le agrego admin a request
+            user?: Payload; //Le agrego user a request
         }
     }
 }

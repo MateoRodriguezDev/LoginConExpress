@@ -1,10 +1,6 @@
-import path from 'path'
-import multer from 'multer'
 import { Request, Response } from "express";
-import {v4 as uuid} from 'uuid'
 import Admin from "../models/Admin.model";
-import { checkPassword, generateToken, hashPassword } from "../helpers";
-import { Payload } from "../types";
+import { hashPassword } from "../helpers";
 
 
 export const getAdmins = async (req: Request, res: Response) => {
@@ -30,34 +26,6 @@ export const createAdmin = async (req: Request, res: Response) => {
     await user.save()
 
     return res.json({data: {user: user.name, email}})
-}
-
-export const loginAdmin = async (req: Request, res: Response) => {
-    const {email, password} = req.body
-    
-    //Verificamos que el usuario exista
-    const user = await Admin.findOne({where: {email}})
-    if(!user){
-        return res.status(404).json({error: 'El Usuario no existe'})
-    }
-    
-    //Verificamos que la contraseña sea correcta
-    const isPasswordValid = await checkPassword(password, user.password)
-    if(!isPasswordValid){
-        return res.status(404).json({error: 'La contraseña no es correcta'})
-    }
-    
-    //Devolvemos un token con los datos del usuario que requiera el front
-    const payload : Payload = {
-        id: user.id,
-        username: user.name
-    }
-    return res.status(200).json({token: generateToken(payload)})
-} 
-
-export const getAdminById = (req: Request, res: Response) => {
-    const {name, email, rol} = req.admin
-    res.json({vista: "Perfil", admin: {name, email, rol}})
 }
 
 
