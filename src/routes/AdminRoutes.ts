@@ -1,11 +1,12 @@
 import {Router} from 'express'
 import { body } from 'express-validator'
 import { getAdmins, createAdmin } from '../controllers/admin'
-import { handleErrors, isAdmin, verifyToken } from '../middlewares'
+import { handleErrors, isAdmin, isSuperAdmin, verifyToken } from '../middlewares'
 
 
 const router = Router()
-router.get('/', verifyToken, isAdmin, getAdmins)
+router.use(verifyToken, isSuperAdmin)
+router.get('/', getAdmins)
 
 router.post('/register', 
     body('name')
@@ -20,8 +21,6 @@ router.post('/register',
         .isLength({ min: 8 }).withMessage('La contraseña debe tener al menos 8 caracteres')
         .matches(/\d/).withMessage('La contraseña debe contener al menos un número')
         .matches(/[A-Za-z]/).withMessage('La contraseña debe contener al menos una letra'),
-    verifyToken,
-    isAdmin,
     handleErrors,
     createAdmin
 )

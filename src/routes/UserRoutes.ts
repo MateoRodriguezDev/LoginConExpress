@@ -1,11 +1,11 @@
 import {Router} from 'express'
-import { body } from 'express-validator'
-import { getAdmins, createAdmin } from '../controllers/admin'
-import { handleErrors, isAdmin, verifyToken } from '../middlewares'
+import { body, param } from 'express-validator'
+import { handleErrors, isAdmin, isUser, verifyToken } from '../middlewares'
+import { createUser, deleteUser, getUserById, getUsers, updateUser } from '../controllers/user'
 
 
 const router = Router()
-router.get('/', verifyToken, isAdmin, getAdmins)
+router.use(verifyToken, isAdmin)
 
 router.post('/register', 
     body('name')
@@ -20,10 +20,41 @@ router.post('/register',
         .isLength({ min: 8 }).withMessage('La contraseña debe tener al menos 8 caracteres')
         .matches(/\d/).withMessage('La contraseña debe contener al menos un número')
         .matches(/[A-Za-z]/).withMessage('La contraseña debe contener al menos una letra'),
-    verifyToken,
-    isAdmin,
     handleErrors,
-    createAdmin
+    createUser
+)
+
+router.get('/', getUsers)
+
+router.get('/:userId', 
+    param('userId')
+        .isInt({ gt: 0 }).withMessage('El ID del Paciente debe ser un número entero positivo'),
+    handleErrors,
+    getUserById
+)
+
+router.put('/:userId', 
+    body('name')
+        .isString().withMessage('El nombre debe ser un string')
+        .trim().isLength({min: 5, max: 15}).withMessage('Minimo 5 caracteres, maximo 15'),
+
+    body('email')
+        .trim()
+        .isEmail().withMessage('Ingrese un email valido'),
+    
+    body('password')
+        .isLength({ min: 8 }).withMessage('La contraseña debe tener al menos 8 caracteres')
+        .matches(/\d/).withMessage('La contraseña debe contener al menos un número')
+        .matches(/[A-Za-z]/).withMessage('La contraseña debe contener al menos una letra'),
+    handleErrors,
+    updateUser
+)
+
+router.delete('/:userId', 
+    param('userId')
+        .isInt({ gt: 0 }).withMessage('El ID del Paciente debe ser un número entero positivo'),
+    handleErrors,
+    deleteUser
 )
 
 

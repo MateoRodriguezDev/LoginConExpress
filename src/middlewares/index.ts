@@ -51,7 +51,7 @@ export const verifyToken = async ( req: Request, res: Response, next: NextFuncti
 };
 
 
-export const isAdmin = async ( req: Request, res: Response, next: NextFunction) => {
+export const isSuperAdmin = async ( req: Request, res: Response, next: NextFunction) => {
   if(!req.user){
     return res.status(403).send("Inicie Sesión");
   }
@@ -61,12 +61,22 @@ export const isAdmin = async ( req: Request, res: Response, next: NextFunction) 
   next()
 }
 
-export const isUser = async ( req: Request, res: Response, next: NextFunction) => {
-  if(!req.admin && !req.user){
+export const isAdmin = async ( req: Request, res: Response, next: NextFunction) => {
+  if(!req.user){
     return res.status(403).send("Inicie Sesión");
   }
-  if(req.admin.rol !== 'superadmin' && req.admin.rol !== 'admin' && req.user.rol !== 'user'){
-    return res.status(403).send("Solo el superusuario esta autorizado");
+  if(req.user.rol !== 'admin' && req.user.rol !== 'superadmin'){
+    return res.status(403).send("Solo administradores estan autorizados");
+  }
+  next()
+}
+
+export const isUser = async ( req: Request, res: Response, next: NextFunction) => {
+  if(!req.user){
+    return res.status(403).send("Inicie Sesión");
+  }
+  if(req.user.rol !== 'superadmin' && req.user.rol !== 'admin' && req.user.rol !== 'user'){
+    return res.status(403).send("No autorizado");
   }
   next()
 }

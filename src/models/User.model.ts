@@ -13,7 +13,7 @@ class User extends Model {
     declare name: string
 
     @Column({
-        type: DataType.STRING(20),
+        type: DataType.STRING(),
         allowNull: false
     })
     declare email: string
