@@ -14,7 +14,7 @@ export const getUserById = async (req: Request, res: Response) => {
     try {
         //Vemos si el usuario existe
         const user = await User.findByPk(userId)
-        if(!user) return res.status(404).json({error: 'El Usuario no Existe'}) 
+        if(!user) return res.status(404).send('El Usuario no Existe') 
 
         res.status(200).json({data: user})
     } catch (error) {
@@ -30,7 +30,7 @@ export const createUser = async (req: Request, res: Response) => {
         let exist : User | Admin | null = await User.findOne({where: {email}})
         if(!exist) exist = await Admin.findOne({where: {email}})
         
-        if(exist) return res.status(409).json({error: 'El Usuario ya existe'})
+        if(exist) return res.status(403).send('El Usuario ya existe')
         
 
         const user = await User.create(req.body)
@@ -51,13 +51,13 @@ export const updateUser = async (req: Request, res: Response) => {
     try {
         //Vemos si el usuario existe
         const user = await User.findByPk(userId)
-        if(!user) return res.status(404).json({error: 'El Usuario no Existe'}) 
+        if(!user) return res.status(404).send('El Usuario no Existe') 
 
         //Actualizo el usuario
         await user.update(req.body)
         await user.save()
         
-        res.status(203).json({data: user})
+        res.status(200).json({data: user})
     } catch (error) {
         res.status(500).send('Ha ocurrido un error')
     }
@@ -68,7 +68,7 @@ export const deleteUser = async (req: Request, res: Response) => {
     try {
         //Vemos si el usuario existe
         const user = await User.findByPk(userId)
-        if(!user) return res.status(404).json({error: 'El Usuario no Existe'}) 
+        if(!user) return res.status(404).send('El Usuario no Existe') 
 
         //Borramos el usuario
         user.destroy()

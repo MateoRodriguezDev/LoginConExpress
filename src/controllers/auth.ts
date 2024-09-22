@@ -34,8 +34,3 @@ export const login = async (req: Request, res: Response) => {
     res.status(200).json(token)
 
 }
-
-export const profile = (req: Request, res: Response) => {
-    const {id, email, rol} = req.user
-    res.json({vista: "Perfil", profile: {id, email, rol}})
-}

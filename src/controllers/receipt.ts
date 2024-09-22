@@ -117,7 +117,7 @@ export const deleteReceipt = async (req: Request, res: Response) => {
     fs.unlink(pathFile, () => {});
 
 
-    return res.status(203).send('Recibo eliminado correctamente');
+    return res.status(200).send('Recibo eliminado correctamente');
   } catch (err) {
     return res.status(500).send('Error al eliminar el recibo');
   }
