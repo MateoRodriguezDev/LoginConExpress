@@ -7,7 +7,7 @@ import Admin from "../models/Admin.model";
 
 
 
-/** Express Validator */
+/** EXPRESS VALIDATOR */
 export const handleErrors = (req: Request, res: Response, next: NextFunction) => {
   let result = validationResult(req);
   if (!result.isEmpty()) {
@@ -17,7 +17,8 @@ export const handleErrors = (req: Request, res: Response, next: NextFunction) =>
 };
 
 
-/** JWT Validator */
+
+/** JWT VALIDATOR */
 export const verifyToken = async ( req: Request, res: Response, next: NextFunction) => {
   //Extraigo el token desde el header
   const auth = req.headers["authorization"];
@@ -51,6 +52,7 @@ export const verifyToken = async ( req: Request, res: Response, next: NextFuncti
 };
 
 
+/** AUTORIZACIONES DE USUARIOS */
 export const isSuperAdmin = async ( req: Request, res: Response, next: NextFunction) => {
   if(!req.user){
     return res.status(403).send("Inicie Sesión");
@@ -80,5 +82,9 @@ export const isUser = async ( req: Request, res: Response, next: NextFunction) =
   }
   next()
 }
+
+
+
+
 
 

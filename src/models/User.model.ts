@@ -1,4 +1,5 @@
-import { Model, Column, DataType, Table } from "sequelize-typescript";
+import { Model, Column, DataType, Table, HasMany } from "sequelize-typescript";
+import Receipt from "./Receipt.mode";
 
 
 @Table({
@@ -23,6 +24,11 @@ class User extends Model {
         allowNull: false
     })
     declare password: string
+
+
+    // Relación uno a muchos: un Doctor tiene muchos Pacientes
+    @HasMany(() => Receipt)
+    declare receipts: Receipt[];
 }
 
 

@@ -28,12 +28,14 @@ router.get('/', getUsers)
 
 router.get('/:userId', 
     param('userId')
-        .isInt({ gt: 0 }).withMessage('El ID del Paciente debe ser un número entero positivo'),
+        .isInt({ gt: 0 }).withMessage('El ID del Usuario debe ser un número entero positivo'),
     handleErrors,
     getUserById
 )
 
-router.put('/:userId', 
+router.put('/:userId',
+    param('userId')
+        .isInt({ gt: 0 }).withMessage('El ID del Usuario debe ser un número entero positivo'), 
     body('name')
         .isString().withMessage('El nombre debe ser un string')
         .trim().isLength({min: 5, max: 15}).withMessage('Minimo 5 caracteres, maximo 15'),
@@ -52,7 +54,7 @@ router.put('/:userId',
 
 router.delete('/:userId', 
     param('userId')
-        .isInt({ gt: 0 }).withMessage('El ID del Paciente debe ser un número entero positivo'),
+        .isInt({ gt: 0 }).withMessage('El ID del Usuario debe ser un número entero positivo'),
     handleErrors,
     deleteUser
 )

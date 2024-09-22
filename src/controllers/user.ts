@@ -27,7 +27,7 @@ export const createUser = async (req: Request, res: Response) => {
     
     try {
         //Verifico si el usuario ya existe
-        let exist = await User.findOne({where: {email}})
+        let exist : User | Admin | null = await User.findOne({where: {email}})
         if(!exist) exist = await Admin.findOne({where: {email}})
         
         if(exist) return res.status(409).json({error: 'El Usuario ya existe'})
