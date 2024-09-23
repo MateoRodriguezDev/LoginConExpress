@@ -8,6 +8,16 @@ import Admin from "../models/Admin.model";
 
 
 /** EXPRESS VALIDATOR */
+/**
+ * @description
+ * Maneja los errores, si hay algún error en el express-validator los manda por la respuesta
+ * de no ser asi pasa al siguiente middleware
+ * 
+ * @param {Request} req - Objeto de solicitud de Express
+ * @param {Response} res - Objeto de respuesta de Express
+ * @param {NextFunction} next - Funcion para pasar al siguiente middleware
+ * @returns {void | Response} Devuelve errores o pasa al siguiente middleware
+ */
 export const handleErrors = (req: Request, res: Response, next: NextFunction) => {
   let result = validationResult(req);
   if (!result.isEmpty()) {
@@ -19,6 +29,15 @@ export const handleErrors = (req: Request, res: Response, next: NextFunction) =>
 
 
 /** JWT VALIDATOR */
+/**
+ * Verifica el JWT del header de la solicitud, si es valido guarda la info
+ * del usuario en el request, sino devuelve un error dependiendo del caso
+ * 
+ * @param {Request} req - Objeto de solicitud de Express
+ * @param {Response} res - Objeto de respuesta de Express
+ * @param {NextFunction} next - Funcion para pasar al siguiente middleware
+ * @returns {Promise<void | Response>} Devuelve error o pasa al siguiente middleware
+ */
 export const verifyToken = async ( req: Request, res: Response, next: NextFunction) => {
   //Extraigo el token desde el header
   const auth = req.headers["authorization"];
@@ -53,6 +72,14 @@ export const verifyToken = async ( req: Request, res: Response, next: NextFuncti
 
 
 /** AUTORIZACIONES DE USUARIOS */
+/**
+ * Verifica si el usuario del request es superAdmin
+ * 
+ * @param {Request} req - Objeto de solicitud de Express
+ * @param {Response} res - Objeto de respuesta de Express
+ * @param {NextFunction} next - Función para pasar al siguiente middleware
+ * @returns {Promise<void | Response>} Devuelve error o pasa al siguiente middleware
+ */
 export const isSuperAdmin = async ( req: Request, res: Response, next: NextFunction) => {
   if(!req.user){
     return res.status(403).send("Inicie Sesión");
@@ -62,6 +89,16 @@ export const isSuperAdmin = async ( req: Request, res: Response, next: NextFunct
   }
   next()
 }
+
+
+/**
+ * Verifica si el usuario del request es admin
+ * 
+ * @param {Request} req - Objeto de solicitud de Express
+ * @param {Response} res - Objeto de respuesta de Express
+ * @param {NextFunction} next - Función para pasar al siguiente middleware
+ * @returns {Promise<void | Response>} Devuelve error o pasa al siguiente middleware
+ */
 
 export const isAdmin = async ( req: Request, res: Response, next: NextFunction) => {
   if(!req.user){
@@ -73,6 +110,15 @@ export const isAdmin = async ( req: Request, res: Response, next: NextFunction) 
   next()
 }
 
+
+/**
+ * Verifica si el usuario del request es user
+ * 
+ * @param {Request} req - Objeto de solicitud de Express
+ * @param {Response} res - Objeto de respuesta de Express
+ * @param {NextFunction} next - Función para pasar al siguiente middleware
+ * @returns {Promise<void | Response>} Devuelve error o pasa al siguiente middleware
+ */
 export const isUser = async ( req: Request, res: Response, next: NextFunction) => {
   if(!req.user){
     return res.status(403).send("Inicie Sesión");

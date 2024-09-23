@@ -7,6 +7,15 @@ import Receipt from "../models/Receipt.mode";
 
 const extensions = ["pdf"];
 
+
+/**
+ * Crea un recibo y sube un archivo PDF asociado a un usuario,
+ * verifica si el tipo de archivo es correcto y si el usuario existe
+ * 
+ * @param {Request} req - Solicitud de Express con el PDF y id del usuario
+ * @param {Response} res - Respuesta de Express
+ * @returns {Promise<Response>} Devuelve un error o un mensaje de exito
+ */
 export const createReceipt = async (req: Request, res: Response) => {
   const { userId } = req.params;
   try {
@@ -60,6 +69,14 @@ export const getReceipts = async (req: Request, res: Response) => {
 };
 
 /** DESCARGO UN RECIBO */
+/**
+ * Descarga el recibo por id, en el caso de ser un usuario el que lo quiere descargar
+ * verifica si el recibo es de dicho usuario
+ * 
+ * @param {Request} req - Solicitud de Express con el id del recibo
+ * @param {Response} res - Respuesta de Express.
+ * @returns {Promise<Response>} Devuelve un error o descarga el archivo
+ */
 export const getReceiptById = async (req: Request, res: Response) => {
   const { receiptId } = req.params;
   try {
@@ -87,6 +104,7 @@ export const getReceiptById = async (req: Request, res: Response) => {
   }
 };
 
+
 export const getReceiptsByUser = async (req: Request, res: Response) => {
   const { userId } = req.params;
   const receipts = await Receipt.findAll({ where: { userId } });
@@ -100,6 +118,14 @@ export const getReceiptsByUser = async (req: Request, res: Response) => {
   res.status(200).json({ data: receipts });
 };
 
+
+/**
+ * Elimina un recibo por su ID y borra el archivo asociado
+ * 
+ * @param {Request} req - Solicitud de Express con el id del recibo
+ * @param {Response} res - Respuesta de Express
+ * @returns {Promise<Response>} Devuelve error o un mensaje de exito
+ */
 export const deleteReceipt = async (req: Request, res: Response) => {
   const { receiptId } = req.params;
 

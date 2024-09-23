@@ -29,11 +29,10 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({}))
 app.use(fileUpload({
-    // Opciones (son opcionales, pero pueden ser útiles)
-    limits: { fileSize: 50 * 1024 * 1024 }, // Limitar tamaño del archivo (50MB en este caso)
-    abortOnLimit: true, // Cancelar la subida si se excede el límite
-    useTempFiles: true, // Utiliza archivos temporales para manejar la carga
-    tempFileDir: path.join(__dirname, 'tmp'), // Directorio temporal
+    limits: { fileSize: 50 * 1024 * 1024 },
+    abortOnLimit: true,
+    useTempFiles: true,
+    tempFileDir: path.join(__dirname, 'tmp'),
   }));
 
 /** Middlewares */

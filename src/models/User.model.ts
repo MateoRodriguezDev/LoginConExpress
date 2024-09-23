@@ -26,7 +26,7 @@ class User extends Model {
     declare password: string
 
 
-    // Relación uno a muchos: un Doctor tiene muchos Pacientes
+    //Un usuario tiene muchos recibos
     @HasMany(() => Receipt)
     declare receipts: Receipt[];
 }

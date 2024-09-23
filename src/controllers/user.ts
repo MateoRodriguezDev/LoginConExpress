@@ -22,6 +22,14 @@ export const getUserById = async (req: Request, res: Response) => {
     }
 }
 
+
+/**
+ * Crea un usuario revisando primero si el correo no fue utilizado
+ * 
+ * @param {Request} req - Objeto de solicitud de Express con correo y contraseña
+ * @param {Response} res - Objeto de respuesta de Express
+ * @returns {Promise<Response>} Devuelve un error o un JSON con los datos del nuevo usuario
+ */
 export const createUser = async (req: Request, res: Response) => {
     const {email, password} = req.body
     

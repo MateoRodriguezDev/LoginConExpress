@@ -71,7 +71,6 @@ export const deleteAdmin = async (req: Request, res: Response) => {
             return res.status(409).send('No se puede eliminar el superusuario') 
         }
 
-
         //Borramos el usuario
         admin.destroy()
 
