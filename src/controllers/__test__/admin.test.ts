@@ -3,7 +3,6 @@ import dotenv from 'dotenv'
 import jwt  from 'jsonwebtoken';
 import app from '../../server';
 import db from '../../config/db';
-import Admin from '../../models/Admin.model';
 import { hashPassword } from '../../helpers';
 import User from '../../models/User.model';
 

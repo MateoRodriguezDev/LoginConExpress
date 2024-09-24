@@ -2,7 +2,7 @@ import request from 'supertest';
 import dotenv from 'dotenv'
 import app from '../../server';
 import db from '../../config/db';
-import { generateToken, hashPassword } from '../../helpers';
+import { hashPassword } from '../../helpers';
 import User from '../../models/User.model';
 
 dotenv.config()
@@ -14,12 +14,6 @@ beforeAll(async () => {
     await db.authenticate();
     await db.sync();
 
-    //Creo un usuario normal
-    await User.create({
-        name: 'user',
-        email: 'user@user.com',
-        password: await hashPassword('password')
-    })
 });
 
 afterAll(async () => {
@@ -44,7 +38,7 @@ describe('POST /api/auth/login', () => {
             .post(`/api/auth/login`)
             .send({
                 email: 'asdf@asdf.com',
-                password: 'password1'
+                password: 'superadmin'
             })
 
 
@@ -58,7 +52,7 @@ describe('POST /api/auth/login', () => {
         const response = await request(app)
             .post(`/api/auth/login`)
             .send({
-                email: 'user@user.com',
+                email: 'super@super.com',
                 password: 'asdfasdf1'
             })
 
@@ -73,8 +67,8 @@ describe('POST /api/auth/login', () => {
         const response = await request(app)
             .post(`/api/auth/login`)
             .send({
-                email: 'user@user.com',
-                password: 'password'
+                email: 'super@super.com',
+                password: 'superadmin'
             })
 
         expect(response.status).toBe(200)

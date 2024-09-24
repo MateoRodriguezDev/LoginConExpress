@@ -110,10 +110,14 @@ export const getReceiptsByUser = async (req: Request, res: Response) => {
   const receipts = await Receipt.findAll({ where: { userId } });
   const receipt = receipts[0];
 
+   //Primero revisa si existe el usuario
+   const userExist = await User.findByPk(userId);
+   if (!userExist) return res.status(404).send("Usuario No Existe");
+
+
   //Vemos si el recibo pertenece a el usuario
-  if (req.user.rol === "user" && receipt && req.user.id !== receipt.userId) {
-    return res.status(409).send("Los Recibos no son tuyos");
-  }
+  if (req.user.rol === "user" && receipt && req.user.id !== receipt.userId) return res.status(409).send("Los Recibos no son tuyos");
+  
 
   res.status(200).json({ data: receipts });
 };
