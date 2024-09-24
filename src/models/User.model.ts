@@ -1,5 +1,5 @@
 import { Model, Column, DataType, Table, HasMany } from "sequelize-typescript";
-import Receipt from "./Receipt.mode";
+import Receipt from "./Receipt.model";
 
 
 @Table({

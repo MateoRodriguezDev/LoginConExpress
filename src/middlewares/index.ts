@@ -48,7 +48,7 @@ export const verifyToken = async ( req: Request, res: Response, next: NextFuncti
 
   try {
     //Verifico si el token es valido
-    const decoded = jwt.verify(token, "PalabraSecreta") as JWTPayload;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET) as JWTPayload;
 
     //Reviso si el usuario del jwt existe en mi base de datos
     let user: Admin | User | null = await Admin.findByPk(decoded.id);
@@ -81,9 +81,6 @@ export const verifyToken = async ( req: Request, res: Response, next: NextFuncti
  * @returns {Promise<void | Response>} Devuelve error o pasa al siguiente middleware
  */
 export const isSuperAdmin = async ( req: Request, res: Response, next: NextFunction) => {
-  if(!req.user){
-    return res.status(403).send("Inicie Sesión");
-  }
   if(req.user.rol !== 'superadmin'){
     return res.status(403).send("Solo el superusuario esta autorizado");
   }
@@ -101,9 +98,6 @@ export const isSuperAdmin = async ( req: Request, res: Response, next: NextFunct
  */
 
 export const isAdmin = async ( req: Request, res: Response, next: NextFunction) => {
-  if(!req.user){
-    return res.status(403).send("Inicie Sesión");
-  }
   if(req.user.rol !== 'admin' && req.user.rol !== 'superadmin'){
     return res.status(403).send("Solo administradores estan autorizados");
   }
@@ -120,9 +114,6 @@ export const isAdmin = async ( req: Request, res: Response, next: NextFunction) 
  * @returns {Promise<void | Response>} Devuelve error o pasa al siguiente middleware
  */
 export const isUser = async ( req: Request, res: Response, next: NextFunction) => {
-  if(!req.user){
-    return res.status(403).send("Inicie Sesión");
-  }
   if(req.user.rol !== 'superadmin' && req.user.rol !== 'admin' && req.user.rol !== 'user'){
     return res.status(403).send("No autorizado");
   }

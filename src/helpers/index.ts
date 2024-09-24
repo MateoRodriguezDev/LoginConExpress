@@ -1,7 +1,11 @@
+import {exit} from 'node:process'
+import dotenv from 'dotenv'
 import jwt from "jsonwebtoken";
+import db from '../config/db';
 import { Payload } from "../types";
 import bcrypt from 'bcrypt'
 
+dotenv.config()
 
 /**
  * Genera un JWT que dura 180 días utilizando una palabra secreta
@@ -13,7 +17,7 @@ export function generateToken(payload: Payload) {
   const options = {
     expiresIn: "180d",
   };
-  const token = jwt.sign(payload, "PalabraSecreta", options);
+  const token = jwt.sign(payload, process.env.JWT_SECRET, options);
   return token;
 }
 

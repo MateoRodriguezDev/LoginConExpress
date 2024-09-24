@@ -30,7 +30,6 @@ export const login = async (req: Request, res: Response) => {
 
     //Verificó que la contraseña sea correcta
     const isValidPassword = await checkPassword(password, user.password)
-    console.log(isValidPassword)
 
     
     if(!isValidPassword){
@@ -44,6 +43,6 @@ export const login = async (req: Request, res: Response) => {
         rol: 'rol' in user ? user.rol : 'user'
     })
 
-    res.status(200).json(token)
+    res.status(200).json({token: token})
 
 }

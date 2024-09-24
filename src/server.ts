@@ -15,9 +15,9 @@ export async function connectDB() {
     try {
         await db.authenticate()
         db.sync()
-        console.log(colors.magenta.bold('Conexion exitosa a la base de datos'))
+        //console.log(colors.magenta.bold('Conexion exitosa a la base de datos'))
     } catch (error) {
-        console.log(colors.red.bold('Hubo un error al conectar a la base de datos'))
+        //console.log(colors.red.bold('Hubo un error al conectar a la base de datos'))
     }
 }
 connectDB()
@@ -39,6 +39,10 @@ app.use(fileUpload({
 app.use(morgan('dev'))
 
 /** Rutas */
+app.get('/api', (req, res) => {
+    res.json({msg: 'Desde API'})
+})
+
 app.use('/api/admins',adminRouter)
 app.use('/api/users',userRouter)
 app.use('/api/auth',authRouter)

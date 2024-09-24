@@ -3,7 +3,7 @@ import fs from "fs";
 import { Request, Response } from "express";
 import { v4 as uuid } from "uuid";
 import User from "../models/User.model";
-import Receipt from "../models/Receipt.mode";
+import Receipt from "../models/Receipt.model";
 
 const extensions = ["pdf"];
 
