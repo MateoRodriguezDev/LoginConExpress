@@ -67,6 +67,7 @@ describe('POST /api/receipts', () => {
         const response = await request(app)
             .post('/api/receipts/1')
             .set('Authorization', `Bearer asdfasdf`)
+
           expect(response.status).toBe(403)
           expect(response.text).toBe('Token no valido')
 
@@ -74,6 +75,9 @@ describe('POST /api/receipts', () => {
     })
 
     it('should display unauthorized errors', async () => {
+        //Simulo un pdf
+        const pdfFilePath = path.resolve(__dirname, './test.pdf');
+
         const response = await request(app)
             .post('/api/receipts/1')
             .set('Authorization', `Bearer ${tokenUser}`)
@@ -100,6 +104,8 @@ describe('POST /api/receipts', () => {
         const response = await request(app)
             .post(`/api/receipts/${userId}`)
             .set('Authorization', `Bearer ${tokenAdmin}`)
+            .field('description', 'asdfasdfasd')
+            .field('amount', 123123);
 
           expect(response.status).toBe(404)
           expect(response.text).toBe('Usuario No Existe')
@@ -111,6 +117,8 @@ describe('POST /api/receipts', () => {
         const response = await request(app)
             .post('/api/receipts/1')
             .set('Authorization', `Bearer ${tokenAdmin}`)
+            .field('description', 'asdfasdfasd')
+            .field('amount', 123123);
 
           expect(response.status).toBe(403)
           expect(response.text).toBe('Archivo obligatorio')
@@ -126,6 +134,8 @@ describe('POST /api/receipts', () => {
             .post('/api/receipts/1')
             .set('Authorization', `Bearer ${tokenAdmin}`)
             .attach('file', pdfFilePath)
+            .field('description', 'asdfasdfasd')
+            .field('amount', 123123);
 
           expect(response.status).toBe(403)
           expect(response.body.msg).toBe('Archivo no valido, tipo de archivos permitidos: pdf');
@@ -141,6 +151,8 @@ describe('POST /api/receipts', () => {
             .post('/api/receipts/1')
             .set('Authorization', `Bearer ${tokenAdmin}`)
             .attach('file', pdfFilePath)
+            .field('description', 'asdfasdfasd')
+            .field('amount', 123123);
       
         expect(201);
         expect(response.text).toBe('Recibo creado correctamente');

@@ -52,6 +52,7 @@ export const createReceipt = async (req: Request, res: Response) => {
 
     //Creo el recibo
     const receipt = await Receipt.create({
+      ...req.body,
       userId: userExist.id,
       location: tempName,
     });

@@ -3,7 +3,8 @@ import User from "./User.model";
 
 
 @Table({
-    tableName: 'receipts'
+    tableName: 'receipts',
+    paranoid: true //Borrado logistico
 })
 
 class Receipt extends Model {
@@ -13,6 +14,18 @@ class Receipt extends Model {
         allowNull: false
     })
     declare location: string;
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: false
+    })
+    declare description: string;
+
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: false
+    })
+    declare amount: number;
 
     // Clave foránea para asociar al Usuario
     @ForeignKey(() => User)
